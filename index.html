@@ -33,6 +33,19 @@
             overflow: hidden;
         }
 
+        /* Glow Cursor Effect */
+        .cursor-glow {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
+            z-index: 9999;
+        }
+
         /* Sidebar Styles */
         .sidebar {
             width: 320px;
@@ -42,17 +55,37 @@
             flex-direction: column;
             height: 100vh;
             flex-shrink: 0;
+            z-index: 2;
         }
 
         .sidebar-header {
             padding: 24px 20px;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .sidebar-header h2 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--accent);
             font-weight: 700;
+        }
+
+        .btn-home {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid var(--purple-glow);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            background: var(--purple-glow);
+            box-shadow: 0 0 10px var(--purple-glow);
         }
 
         .chapters-list {
@@ -70,10 +103,9 @@
             transition: all 0.3s ease;
         }
 
-        /* Hover Effect for Chapters */
         .chapter-item:hover {
             border-color: var(--purple-glow);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
             transform: translateY(-2px);
         }
 
@@ -115,7 +147,6 @@
             transition: all 0.25s ease;
         }
 
-        /* Hover Effect for Lesson Buttons */
         .lesson-btn:hover {
             color: #fff;
             background: var(--purple-hover);
@@ -130,7 +161,7 @@
             border-right: 4px solid #fff;
         }
 
-        /* Main Content Layout */
+        /* Main Content */
         .main-content {
             flex: 1;
             height: 100vh;
@@ -139,6 +170,7 @@
             padding: 24px;
             gap: 16px;
             overflow-y: auto;
+            z-index: 2;
         }
 
         .lesson-header h1 {
@@ -169,7 +201,6 @@
             border: 0;
         }
 
-        /* Document Box with Purple Glow & Visible Download Button */
         .doc-container {
             width: 100%;
             max-width: 900px;
@@ -201,27 +232,25 @@
             color: var(--accent);
         }
 
-        /* Glowing Purple Download Button */
         .btn-download {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             background: linear-gradient(135deg, #a855f7, #7e22ce);
             color: #fff;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 8px;
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             transition: all 0.3s ease;
             box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
         }
 
         .btn-download:hover {
-            transform: scale(1.08);
+            transform: scale(1.05);
             background: linear-gradient(135deg, #c084fc, #9333ea);
-            box-shadow: 0 0 20px rgba(192, 132, 252, 0.8), 0 0 40px rgba(147, 51, 234, 0.6);
-            color: #fff;
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.8);
         }
 
         .doc-body {
@@ -229,42 +258,54 @@
             line-height: 1.8;
             color: #cbd5e1;
             font-size: 0.95rem;
-            min-height: 120px;
         }
     </style>
 </head>
 <body>
 
+    <div class="cursor-glow" id="cursorGlow"></div>
+
     <aside class="sidebar">
         <div class="sidebar-header">
             <h2>مستندات و آموزش‌ها</h2>
+            <button class="btn-home" onclick="showHomePage()">🏠 صفحه اصلی</button>
         </div>
         <div class="chapters-list" id="chaptersContainer"></div>
     </aside>
 
     <main class="main-content">
         <div class="lesson-header">
-            <h1 id="lessonTitle">در حال بارگذاری...</h1>
+            <h1 id="lessonTitle">سلام! به دوره آموزشی خوش آمدید</h1>
         </div>
 
         <div class="video-wrapper">
-            <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+            <iframe id="videoPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
         </div>
 
         <div class="doc-container">
             <div class="doc-header">
-                <span class="doc-title">📄 داکیومنت و راهنما</span>
-                <!-- دکمه دانلود کاملاً واضح در بالا -->
-                <a href="#" id="downloadBtn" class="btn-download" target="_blank" download>
+                <span class="doc-title" id="docHeaderTitle">📄 درباره من و معرفی دوره</span>
+                <a href="#" id="downloadBtn" class="btn-download" target="_blank" download style="display: none;">
                     📥 دانلود فایل ضمیمه
                 </a>
             </div>
-            <div class="doc-body" id="docContent"></div>
+            <div class="doc-body" id="docContent">
+                <h3>درباره مدرس و این دوره</h3>
+                <p>سلام! من امیر هستم. در این دوره قراره قدم به قدم با مباحث مختلف آشنا بشیم.</p>
+                <p>از منوی سمت راست می‌توانید فصل‌ها را باز کرده و درس مورد نظر خود را انتخاب کنید.</p>
+            </div>
         </div>
     </main>
 
     <script>
         let globalLessonsData = [];
+
+        // تعقیب نورانی موس
+        const glow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
 
         function loadData() {
             fetch('lessons.json')
@@ -272,10 +313,9 @@
                 .then(data => {
                     globalLessonsData = data;
                     renderSidebar();
-                    if(data.length > 0 && data[0].lessons.length > 0) {
-                        selectLesson(data[0].lessons[0].id);
-                    }
-                });
+                    showHomePage(); // اجرا در حالت پیش‌فرض روی صفحه اصلی
+                })
+                .catch(err => console.warn("دیتا بارگذاری نشد:", err));
         }
 
         function renderSidebar() {
@@ -292,11 +332,9 @@
                         <span>◀</span>
                     </button>
                     <ul class="lessons-tree">
-                        ${chapter.lessons.map((lesson, lessonIdx) => `
+                        ${chapter.lessons.map((lesson) => `
                             <li>
-                                <button class="lesson-btn ${chapterIdx === 0 && lessonIdx === 0 ? 'active' : ''}" 
-                                        id="btn-${lesson.id}"
-                                        onclick="selectLesson('${lesson.id}')">
+                                <button class="lesson-btn" id="btn-${lesson.id}" onclick="selectLesson('${lesson.id}', '${chapter.chapterTitle}')">
                                     🔹 ${lesson.title}
                                 </button>
                             </li>
@@ -311,7 +349,19 @@
             btn.parentElement.classList.toggle('open');
         }
 
-        function selectLesson(lessonId) {
+        function showHomePage() {
+            document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('lessonTitle').textContent = "👋 درباره من و معرفی دوره";
+            document.getElementById('docHeaderTitle').textContent = "📄 درباره دوره";
+            document.getElementById('videoPlayer').src = "https://www.youtube.com/embed/dQw4w9WgXcQ";
+            document.getElementById('docContent').innerHTML = `
+                <h3>به سامانه آموزشی خوش آمدید</h3>
+                <p>برای شروع یادگیری، از منوی سمت راست روی فصل و درس مورد نظر خود کلیک کنید.</p>
+            `;
+            document.getElementById('downloadBtn').style.display = 'none';
+        }
+
+        function selectLesson(lessonId, chapterTitle) {
             document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
             const activeBtn = document.getElementById(`btn-${lessonId}`);
             if(activeBtn) activeBtn.classList.add('active');
@@ -323,10 +373,19 @@
             }
 
             if (selected) {
-                document.getElementById('lessonTitle').textContent = selected.title;
+                // نمایش نام فصل به همراه نام درس
+                document.getElementById('lessonTitle').textContent = `${chapterTitle} ➔ ${selected.title}`;
+                document.getElementById('docHeaderTitle').textContent = `📄 داکیومنت: ${selected.title}`;
                 document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${selected.youtubeId}`;
-                document.getElementById('docContent').innerHTML = selected.docHtml;
-                document.getElementById('downloadBtn').href = selected.downloadUrl || '#';
+                document.getElementById('docContent').innerHTML = selected.docHtml || '<p>داکیومنتی ثبت نشده است.</p>';
+                
+                const dlBtn = document.getElementById('downloadBtn');
+                if (selected.downloadUrl && selected.downloadUrl.trim() !== "") {
+                    dlBtn.href = selected.downloadUrl;
+                    dlBtn.style.display = 'inline-flex';
+                } else {
+                    dlBtn.style.display = 'none';
+                }
             }
         }
 

@@ -7,183 +7,200 @@
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0b0f19;
-            --bg-card: #151d2a;
-            --border-color: #27354a;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --accent-hover: #0284c7;
-            --danger: #ef4444;
-            --success: #22c55e;
+            --bg-base: #0a0d14;
+            --bg-card: #121824;
+            --border: #2a364f;
+            --purple: #a855f7;
+            --purple-dark: #7e22ce;
+            --text: #f8fafc;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
-        body { background-color: var(--bg-base); color: var(--text-main); min-height: 100vh; padding: 20px; }
+        body { background: var(--bg-base); color: var(--text); padding: 20px; }
 
         /* Login Modal */
-        .login-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(11, 15, 25, 0.95);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000;
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000;
         }
-        .login-box {
-            background: var(--bg-card); padding: 32px; border-radius: 12px;
-            border: 1px solid var(--border-color); width: 100%; max-width: 380px;
+        .modal-box {
+            background: var(--bg-card); border: 1px solid var(--border); padding: 30px; border-radius: 12px; width: 340px; text-align: center;
         }
-        .login-box h2 { color: var(--accent); margin-bottom: 20px; text-align: center; }
-
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; margin-bottom: 6px; font-size: 0.88rem; color: var(--text-muted); }
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; color: #94a3b8; }
         .form-control {
-            width: 100%; padding: 10px 14px; background: #0f172a; border: 1px solid var(--border-color);
-            border-radius: 6px; color: #fff; font-size: 0.95rem; outline: none;
+            width: 100%; padding: 10px; background: #1a2233; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.9rem;
         }
-        .form-control:focus { border-color: var(--accent); }
-
         .btn {
-            width: 100%; padding: 10px; background: var(--accent); color: #0b0f19;
-            font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s;
+            width: 100%; padding: 10px; background: var(--purple); border: none; border-radius: 6px; color: #fff; font-weight: 700; cursor: pointer; transition: 0.3s;
         }
-        .btn:hover { background: var(--accent-hover); color: #fff; }
-        .btn-danger { background: var(--danger); color: #fff; }
-        .btn-danger:hover { background: #dc2626; }
+        .btn:hover { background: var(--purple-dark); box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
 
-        /* Admin Layout */
-        .admin-container { max-width: 1100px; margin: 0 auto; display: none; }
-        .admin-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px;
+        /* Dashboard Layout */
+        .dashboard { display: none; max-width: 1100px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+
+        /* Drag and Drop Zone */
+        .drop-zone {
+            border: 2px dashed var(--purple);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: rgba(168, 85, 247, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #c084fc;
         }
 
-        .github-config {
-            background: var(--bg-card); padding: 16px; border-radius: 8px;
-            border: 1px solid var(--border-color); margin-bottom: 24px;
+        /* Status Toast */
+        .status-msg {
+            display: none; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-weight: 600; text-align: center;
         }
-        .github-config h3 { font-size: 1rem; color: var(--accent); margin-bottom: 12px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-        .admin-grid { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
-        .panel-box {
-            background: var(--bg-card); padding: 20px; border-radius: 10px;
-            border: 1px solid var(--border-color);
-        }
-        .panel-box h3 { margin-bottom: 16px; color: var(--accent); font-size: 1.1rem; }
-
-        textarea.form-control { height: 160px; resize: vertical; font-family: monospace; }
-        
-        .chapter-admin-item {
-            background: #0f172a; border: 1px solid var(--border-color);
-            border-radius: 6px; margin-bottom: 10px; padding: 10px;
-        }
-        .chapter-admin-header { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 8px; }
-        .lesson-admin-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 6px 10px; background: #1a2436; margin-top: 4px; border-radius: 4px; font-size: 0.85rem;
-        }
-        .action-btns { display: flex; gap: 6px; }
-        .sm-btn { padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; border: none; }
-
-        .status-msg { margin-top: 10px; padding: 10px; border-radius: 6px; display: none; text-align: center; }
-        .status-success { background: rgba(34, 197, 94, 0.2); color: var(--success); }
-        .status-error { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .status-success { background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #4ade80; }
+        .status-error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; }
     </style>
 </head>
 <body>
 
-    <!-- Login Dialog -->
-    <div class="login-overlay" id="loginModal">
-        <div class="login-box">
-            <h2>ورود به پنل مدیریت</h2>
-            <div class="form-group">
-                <label>نام کاربری:</label>
-                <input type="text" id="username" class="form-control" placeholder="نام کاربری">
-            </div>
-            <div class="form-group">
-                <label>رمز عبور:</label>
-                <input type="password" id="password" class="form-control" placeholder="رمز عبور">
-            </div>
-            <button class="btn" onclick="checkAuth()">ورود</button>
-            <div id="loginError" style="color: var(--danger); margin-top: 10px; font-size: 0.85rem; text-align: center;"></div>
+    <!-- مودال ورود -->
+    <div class="modal" id="loginModal">
+        <div class="modal-box">
+            <h2 style="margin-bottom: 20px; color: var(--purple);">ورود به پنل مدیریت</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>نام کاربری:</label>
+                    <input type="text" id="username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>رمز عبور:</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn">ورود</button>
+            </form>
+            <p id="loginError" style="color: #f87171; font-size: 0.8rem; margin-top: 10px;"></p>
         </div>
     </div>
 
-    <!-- Main Admin Dashboard -->
-    <div class="admin-container" id="adminDashboard">
-        <header class="admin-header">
-            <h2>⚙️ پنل مدیریت مستندات (JSON Database Manager)</h2>
-            <button class="btn btn-danger" style="width: auto; padding: 8px 16px;" onclick="logout()">خروج</button>
-        </header>
+    <!-- داشبورد اصلی -->
+    <div class="dashboard" id="adminDashboard">
+        <div class="header">
+            <h2>⚙️ مدیریت دروس و محتوا</h2>
+            <button class="btn" style="width: auto; background: #dc2626;" onclick="logout()">خروج</button>
+        </div>
 
-        <!-- GitHub Integration Box -->
-        <div class="github-config">
-            <h3>🔑 تنظیمات همگام‌سازی با GitHub Pages (اختیاری برای انتشار آنلاین)</h3>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>نام کاربری گیت‌هاب / اسم ریپازیتوری (مثال: username/repository):</label>
-                    <input type="text" id="repoPath" class="form-control" placeholder="Username/repo">
-                </div>
-                <div class="form-group">
-                    <label>توکن شخص گیت‌هاب (Personal Access Token):</label>
-                    <input type="password" id="ghToken" class="form-control" placeholder="ghp_xxxxxxxxxxxx">
-                </div>
+        <div id="statusMessage" class="status-msg"></div>
+
+        <!-- تنظیمات گیت هاب -->
+        <div class="card">
+            <h3>🌐 انتشار بر روی GitHub Pages</h3>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" id="repoPath" class="form-control" placeholder="amir1389izady/نام_ریپازیتوری">
+                <input type="password" id="ghToken" class="form-control" placeholder="توکن شخصی گیت‌هاب (ghp_...)">
+                <button class="btn" style="width: 200px;" onclick="AdminManager.commitToGitHub()">انتشار تغییرات</button>
             </div>
         </div>
 
-        <div class="admin-grid">
-            <!-- Sidebar: Chapters & Lessons Tree -->
-            <div class="panel-box">
-                <h3>📚 ساختار دروس</h3>
-                <div class="form-group">
-                    <input type="text" id="newChapterTitle" class="form-control" placeholder="عنوان فصل جدید...">
-                    <button class="btn" style="margin-top: 8px;" onclick="AdminManager.addChapter()">+ افزودن فصل</button>
+        <div class="grid">
+            <!-- مدیریت فصل‌ها و ساختار -->
+            <div>
+                <div class="card">
+                    <h3>➕ افزودن فصل جدید</h3>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <input type="text" id="newChapterTitle" class="form-control" placeholder="عنوان فصل...">
+                        <button class="btn" style="width: 100px;" onclick="AdminManager.addChapter()">افزودن</button>
+                    </div>
                 </div>
-                <hr style="border-color: var(--border-color); margin: 16px 0;">
-                <div id="chaptersAdminList"></div>
+
+                <div class="card">
+                    <h3>📂 ساختار دوره</h3>
+                    <div id="chaptersAdminList" style="margin-top: 10px;"></div>
+                </div>
             </div>
 
-            <!-- Form: Add / Edit Lesson -->
-            <div class="panel-box">
-                <h3 id="formTitle">➕ افزودن درس جدید</h3>
-                <form id="lessonForm" onsubmit="event.preventDefault(); AdminManager.saveLesson();">
-                    <input type="hidden" id="editLessonId">
-                    <div class="form-group">
-                        <label>انتخاب فصل:</label>
-                        <select id="chapterSelect" class="form-control" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>عنوان درس:</label>
-                        <input type="text" id="lessonTitleInput" class="form-control" required placeholder="مثلاً: درس ۱: نصب ابزارها">
-                    </div>
-                    <div class="form-group">
-                        <label>شناسه ویدیو یوتیوب (YouTube Video ID):</label>
-                        <input type="text" id="youtubeIdInput" class="form-control" required placeholder="کد ۱۱ رقمی مثل: dQw4w9WgXcQ">
-                    </div>
-                    <div class="form-group">
-                        <label>متن و داکیومنت (HTML/کد):</label>
-                        <textarea id="docHtmlInput" class="form-control" required placeholder="متن داکیومنت و کدها به همراه تگ‌های HTML..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>لینک دانلود فایل ضمیمه (دانلود داکیومنت):</label>
-                        <input type="text" id="downloadUrlInput" class="form-control" placeholder="https://...">
-                    </div>
+            <!-- فرم مدیریت و آپلود درس -->
+            <div>
+                <div class="card">
+                    <h3 id="formTitle">➕ افزودن / ویرایش درس</h3>
+                    <form id="lessonForm" style="margin-top: 15px;">
+                        <input type="hidden" id="editLessonId">
+                        
+                        <div class="form-group">
+                            <label>انتخاب فصل:</label>
+                            <select id="chapterSelect" class="form-control" required></select>
+                        </div>
 
-                    <button type="submit" class="btn" id="submitBtn">ذخیره درس</button>
-                </form>
+                        <div class="form-group">
+                            <label>عنوان درس:</label>
+                            <input type="text" id="lessonTitleInput" class="form-control" required>
+                        </div>
 
-                <hr style="border-color: var(--border-color); margin: 20px 0;">
+                        <div class="form-group">
+                            <label>کد یوتیوب (YouTube ID):</label>
+                            <input type="text" id="youtubeIdInput" class="form-control" placeholder="مثال: dQw4w9WgXcQ">
+                        </div>
 
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn" style="background: #22c55e;" onclick="AdminManager.exportJSON()">دانلود فایل JSON جدید</button>
-                    <button class="btn" style="background: #6366f1;" onclick="AdminManager.commitToGitHub()">ارسال مستقیم به GitHub Pages 🚀</button>
+                        <div class="form-group">
+                            <label>آپلود سریع فایل داکیومنت (Drag & Drop):</label>
+                            <div class="drop-zone" id="dropZone">
+                                📁 فایل متنی یا HTML را بکشید و رها کنید
+                                <input type="file" id="fileInput" style="display: none;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>متن و کد داکیومنت (HTML):</label>
+                            <textarea id="docHtmlInput" class="form-control" rows="6"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>لینک مستقیم فایل دانلود ضمیمه:</label>
+                            <input type="text" id="downloadUrlInput" class="form-control" placeholder="https://...">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" id="submitBtn" class="btn">ذخیره درس</button>
+                            <button type="button" class="btn" style="background: #475569;" onclick="AdminManager.resetForm()">انصراف</button>
+                        </div>
+                    </form>
                 </div>
-
-                <div id="statusMessage" class="status-msg"></div>
             </div>
         </div>
     </div>
 
     <script src="admin.js"></script>
+    <script>
+        // افزودن قابلیت Drag and Drop مستقیم
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        if (dropZone) {
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) handleFileUpload(e.dataTransfer.files[0]);
+            });
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) handleFileUpload(fileInput.files[0]);
+            });
+        }
+
+        function handleFileUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('docHtmlInput').value = e.target.result;
+                alert(`محتوای فایل "${file.name}" در کادر داکیومنت جایگذاری شد.`);
+            };
+            reader.readAsText(file);
+        }
+    </script>
 </body>
 </html>

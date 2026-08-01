@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مستندات و دوره آموزشی</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>سامانه آموزش و مستندات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --border-color: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-color: #38bdf8;
-            --accent-hover: #0284c7;
-            --video-bg: #0f172a;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent-bg: #eff6ff;
         }
 
         * {
@@ -25,319 +25,364 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-main);
             color: var(--text-main);
             display: flex;
-            min-height: 100vh;
-            line-height: 1.6;
+            height: 100vh;
+            overflow: hidden; /* جلوگیری از اسکرول کلی صفحه */
         }
 
-        /* Sidebar Header & Nav */
+        /* --- Sidebar Style --- */
         .sidebar {
-            width: 300px;
-            background-color: var(--card-bg);
+            width: 320px;
+            background-color: var(--bg-card);
             border-left: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            overflow-y: auto;
-            z-index: 100;
+            height: 100vh;
+            flex-shrink: 0;
         }
 
         .sidebar-header {
-            padding: 24px 20px;
+            padding: 20px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .sidebar-header h2 {
-            font-size: 1.25rem;
-            color: var(--accent-color);
+            font-size: 1.1rem;
+            color: var(--primary);
             font-weight: 700;
         }
 
-        .sidebar-header p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
+        .chapters-list {
+            overflow-y: auto;
+            flex: 1;
+            padding: 12px;
         }
 
-        .nav-list {
-            list-style: none;
-            padding: 16px 12px;
+        /* Chapter Accordion */
+        .chapter-item {
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .nav-section-title {
+        .chapter-title {
+            width: 100%;
+            background: #f1f5f9;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: background 0.2s;
+        }
+
+        .chapter-title:hover {
+            background: #e2e8f0;
+        }
+
+        .arrow-icon {
             font-size: 0.75rem;
-            text-transform: uppercase;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-item.open .arrow-icon {
+            transform: rotate(-90deg); /* چرخش مثلث در حالت باز */
+        }
+
+        .lessons-tree {
+            display: none;
+            list-style: none;
+            background: var(--bg-card);
+            padding: 6px 0;
+        }
+
+        .chapter-item.open .lessons-tree {
+            display: block;
+        }
+
+        .lesson-btn {
+            width: 100%;
+            padding: 10px 20px;
+            text-align: right;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.88rem;
             color: var(--text-muted);
-            letter-spacing: 0.05em;
-            padding: 12px 12px 6px;
-            font-weight: 700;
-        }
-
-        .nav-item {
-            margin-bottom: 4px;
-        }
-
-        .nav-link {
             display: flex;
             align-items: center;
-            padding: 10px 12px;
-            color: var(--text-main);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
+            gap: 8px;
+            transition: all 0.2s;
         }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: rgba(56, 189, 248, 0.1);
-            color: var(--accent-color);
+        .lesson-btn:hover {
+            color: var(--primary);
+            background: var(--accent-bg);
         }
 
-        .nav-link .lesson-number {
-            background: var(--border-color);
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 10px;
+        .lesson-btn.active {
+            color: var(--primary);
+            background: var(--accent-bg);
+            font-weight: 600;
+            border-right: 3px solid var(--primary);
         }
 
-        .nav-link.active .lesson-number {
-            background: var(--accent-color);
-            color: #000;
-        }
-
-        /* Main Content Area */
+        /* --- Main Content Style --- */
         .main-content {
-            margin-right: 300px;
             flex: 1;
-            padding: 40px;
-            max-width: 1000px;
-        }
-
-        .header-section {
-            margin-bottom: 32px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 24px;
-        }
-
-        .header-section h1 {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .meta-info {
+            height: 100vh;
             display: flex;
-            gap: 16px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            flex-direction: column;
+            padding: 24px 32px;
+            gap: 20px;
+            overflow: hidden; /* جلوگیری از اسکرول اصلی */
+        }
+
+        .lesson-header h1 {
+            font-size: 1.5rem;
+            color: var(--text-main);
         }
 
         /* Video Container */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            overflow: hidden;
+        .video-wrapper {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #000;
             border-radius: 12px;
-            background-color: var(--video-bg);
+            overflow: hidden;
             border: 1px solid var(--border-color);
-            margin-bottom: 32px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            flex-shrink: 0; /* عدم تغییر سایز ویدیو */
         }
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .video-wrapper iframe {
             width: 100%;
             height: 100%;
             border: 0;
         }
 
-        /* Content Blocks */
-        .content-block {
-            background-color: var(--card-bg);
+        /* Document Container (Internal Scroll) */
+        .doc-container {
+            flex: 1;
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .content-block h3 {
-            color: var(--accent-color);
-            margin-bottom: 16px;
-            font-size: 1.2rem;
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            overflow: hidden; /* اسکرول فقط داخل این بخش */
+            max-width: 900px;
         }
 
-        .content-block p {
-            color: #cbd5e1;
-            margin-bottom: 12px;
+        .doc-header {
+            padding: 14px 20px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
         }
 
-        .content-block ul {
-            margin-right: 20px;
-            color: #cbd5e1;
+        .doc-body {
+            padding: 20px;
+            overflow-y: auto; /* اسکرول داخلی داکیومنت */
+            flex: 1;
+            line-height: 1.8;
+            color: #334155;
+            font-size: 0.95rem;
         }
 
-        .content-block li {
-            margin-bottom: 8px;
+        .doc-footer {
+            padding: 12px 20px;
+            background: #f8fafc;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
         }
 
-        /* Code Block Style */
-        pre {
-            background-color: var(--bg-color);
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-            direction: ltr;
-            text-align: left;
-            font-family: monospace;
-            color: #38bdf8;
-            margin: 16px 0;
-        }
-
-        /* Link Buttons */
-        .btn {
+        /* Download Button */
+        .btn-download {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background-color: var(--accent-color);
-            color: #0f172a;
-            padding: 10px 20px;
-            border-radius: 8px;
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
+            font-size: 0.88rem;
+            font-weight: 500;
             transition: background 0.2s;
-            margin-top: 12px;
         }
 
-        .btn:hover {
-            background-color: var(--accent-hover);
-            color: #fff;
+        .btn-download:hover {
+            background-color: var(--primary-hover);
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
+                overflow: auto;
             }
             .sidebar {
                 width: 100%;
-                position: relative;
-                border-left: none;
-                border-bottom: 1px solid var(--border-color);
+                height: auto;
             }
             .main-content {
-                margin-right: 0;
-                padding: 20px;
+                height: auto;
+                overflow: visible;
+                padding: 16px;
+            }
+            .doc-container {
+                height: 400px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar / Menu -->
+    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>مستندات و آموزش‌ها</h2>
-            <p>سرفصل‌ها و دروس دوره</p>
+            <h2>سرفصل‌های آموزشی</h2>
         </div>
-        <ul class="nav-list">
-            <li class="nav-section-title">فصل اول: مقدمات</li>
-            <li class="nav-item">
-                <a href="#lesson1" class="nav-link active">
-                    <span class="lesson-number">۰۱</span>
-                    آشنایی با دوره و پیش‌نیازها
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#lesson2" class="nav-link">
-                    <span class="lesson-number">۰۲</span>
-                    نصب و پیکربندی ابزارها
-                </a>
-            </li>
-
-            <li class="nav-section-title">فصل دوم: مفاهیم اصلی</li>
-            <li class="nav-item">
-                <a href="#lesson3" class="nav-link">
-                    <span class="lesson-number">۰۳</span>
-                    آموزش بخش اول و کدنویسی
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#lesson4" class="nav-link">
-                    <span class="lesson-number">۰۴</span>
-                    اتصال به پایگاه داده و سرور
-                </a>
-            </li>
-        </ul>
+        <div class="chapters-list" id="chaptersContainer">
+            <!-- سرفصل‌ها و درس‌ها توسط JavaScript بارگذاری می‌شوند -->
+        </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="main-content">
-        
-        <header class="header-section">
-            <h1>درس اول: آشنایی با دوره و پیش‌نیازها</h1>
-            <div class="meta-info">
-                <span>⏱ مدت زمان: ۱۵ دقیقه</span>
-                <span>📅 آخرین بروزرسانی: مرداد ۱۴۰۵</span>
+        <div class="lesson-header">
+            <h1 id="lessonTitle">در حال بارگذاری...</h1>
+        </div>
+
+        <!-- Video Player -->
+        <div class="video-wrapper">
+            <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+        </div>
+
+        <!-- Document Section with Internal Scroll -->
+        <div class="doc-container">
+            <div class="doc-header">📄 داکیومنت و متن درس</div>
+            <div class="doc-body" id="docContent">
+                <!-- متن داکیومنت اینجا قرار می‌گیرد -->
             </div>
-        </header>
-
-        <!-- Video Embed Section -->
-        <section class="video-container">
-            <!-- جای لینک ویدیو یوتیوب شما (کد EMBED) -->
-            <iframe 
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                title="ویدیو آموزشی یوتیوب" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-            </iframe>
-        </section>
-
-        <!-- Lesson Documentation / Text -->
-        <section class="content-block">
-            <h3>📌 خلاصه و داکیومنت درس</h3>
-            <p>در این ویدیو به بررسی مفاهیم پایه و نقشه راه کلی دوره می‌پردازیم. حتماً قبل از ادامه مسیر، موارد زیر را مطالعه کنید.</p>
-            <ul>
-                <li>بررسی پیش‌نیازهای سخت‌افزاری و نرم‌افزاری.</li>
-                <li>آشنایی با محیط توسعه و ابزارهای مورد نیاز.</li>
-                <li>معرفی منابع کمکی و لینک‌های مفید.</li>
-            </ul>
-        </section>
-
-        <!-- Code / Technical Section -->
-        <section class="content-block">
-            <h3>💻 نمونه کد / دستورات</h3>
-            <p>کدها یا دستوراتی که در این جلسه استفاده شده است:</p>
-            <pre><code># دستور نصب ابزارها
-pip install django
-python manage.py runserver</code></pre>
-        </section>
-
-        <!-- External Resources & Links -->
-        <section class="content-block">
-            <h3>🔗 لینک‌ها و منابع ضمیمه</h3>
-            <p>برای دریافت کدهای کامل این جلسه و فایل‌های تمرینی از لینک‌های زیر استفاده کنید:</p>
-            <a href="https://youtube.com" target="_blank" class="btn">
-                مشاهده مستقیم در یوتیوب 🎬
-            </a>
-            <a href="https://github.com" target="_blank" class="btn" style="background-color: #333; color: #fff; margin-right: 10px;">
-                مخزن گیت‌هاب (GitHub) 📦
-            </a>
-        </section>
-
+            <div class="doc-footer">
+                <a href="#" id="downloadBtn" class="btn-download" target="_blank" download>
+                    📥 دانلود فایل داکیومنت
+                </a>
+            </div>
+        </div>
     </main>
 
+    <script>
+        // ساختار داده‌ها (دیتابیس فرضی - آماده برای اتصال به پنل ادمین یا JSON)
+        const lessonsData = [
+            {
+                chapterTitle: "فصل اول: مقدمات و پایه",
+                lessons: [
+                    {
+                        id: "1-1",
+                        title: "درس ۱: آشنایی با دوره",
+                        youtubeId: "dQw4w9WgXcQ",
+                        docHtml: "<p>به این دوره خوش آمدید. در این بخش با ساختار کلی و نقشه راه آشنا می‌شویم.</p><p>نکات کلیدی:</p><ul><li>مفهوم پایه</li><li>ابزارهای مورد نیاز</li></ul>",
+                        downloadUrl: "#"
+                    },
+                    {
+                        id: "1-2",
+                        title: "درس ۲: نصب ابزارها",
+                        youtubeId: "dQw4w9WgXcQ",
+                        docHtml: "<p>در این قسمت ابزارهای لازم را نصب می‌کنیم.</p><p>کد نصب:</p><pre>pip install package</pre>",
+                        downloadUrl: "#"
+                    }
+                ]
+            },
+            {
+                chapterTitle: "فصل دوم: مفاهیم پیشرفته",
+                lessons: [
+                    {
+                        id: "2-1",
+                        title: "درس ۱: اتصال به پایگاه داده",
+                        youtubeId: "dQw4w9WgXcQ",
+                        docHtml: "<p>توضیحات مفصل مربوط به پیکربندی دیتابیس و اتصال آن به برنامه...</p>",
+                        downloadUrl: "#"
+                    }
+                ]
+            }
+        ];
+
+        // رندر کردن منوی سرفصل‌ها
+        function renderSidebar() {
+            const container = document.getElementById('chaptersContainer');
+            container.innerHTML = '';
+
+            lessonsData.forEach((chapter, chapterIdx) => {
+                const chapterEl = document.createElement('div');
+                chapterEl.className = `chapter-item ${chapterIdx === 0 ? 'open' : ''}`;
+
+                chapterEl.innerHTML = `
+                    <button class="chapter-title" onclick="toggleChapter(this)">
+                        <span>${chapter.chapterTitle}</span>
+                        <span class="arrow-icon">◀</span>
+                    </button>
+                    <ul class="lessons-tree">
+                        ${chapter.lessons.map((lesson, lessonIdx) => `
+                            <li>
+                                <button class="lesson-btn ${chapterIdx === 0 && lessonIdx === 0 ? 'active' : ''}" 
+                                        onclick="selectLesson('${lesson.id}', this)">
+                                    🔹 ${lesson.title}
+                                </button>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                container.appendChild(chapterEl);
+            });
+        }
+
+        // باز و بسته کردن آکاردئونی فصل‌ها
+        function toggleChapter(btn) {
+            const item = btn.parentElement;
+            item.classList.toggle('open');
+        }
+
+        // انتخاب درس و نمایش اطلاعات
+        function selectLesson(lessonId, btnEl) {
+            // فعال کردن دکمه انتخابی
+            document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
+            if(btnEl) btnEl.classList.add('active');
+
+            // پیدا کردن داده‌های درس
+            let selectedLesson = null;
+            for (const chapter of lessonsData) {
+                const found = chapter.lessons.find(l => l.id === lessonId);
+                if (found) {
+                    selectedLesson = found;
+                    break;
+                }
+            }
+
+            if (selectedLesson) {
+                document.getElementById('lessonTitle').textContent = selectedLesson.title;
+                document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${selectedLesson.youtubeId}`;
+                document.getElementById('docContent').innerHTML = selectedLesson.docHtml;
+                document.getElementById('downloadBtn').href = selectedLesson.downloadUrl;
+            }
+        }
+
+        // اجرای اولیه
+        renderSidebar();
+        // لود اولین درس به صورت پیش‌فرض
+        selectLesson(lessonsData[0].lessons[0].id);
+    </script>
 </body>
 </html>

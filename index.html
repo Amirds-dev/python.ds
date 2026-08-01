@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سامانه آموزش و مستندات</title>
+    <title>سامانه جامع آموزش و مستندات</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #f8fafc;
-            --bg-card: #ffffff;
-            --border-color: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --accent-bg: #eff6ff;
+            --bg-base: #0f172a;
+            --bg-side: #1e293b;
+            --bg-card: #182232;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --code-bg: #090d16;
         }
 
         * {
@@ -25,17 +26,17 @@
         }
 
         body {
-            background-color: var(--bg-main);
+            background-color: var(--bg-base);
             color: var(--text-main);
             display: flex;
             height: 100vh;
-            overflow: hidden; /* جلوگیری از اسکرول کلی صفحه */
+            overflow: hidden;
         }
 
-        /* --- Sidebar Style --- */
+        /* Sidebar Styles */
         .sidebar {
             width: 320px;
-            background-color: var(--bg-card);
+            background-color: var(--bg-side);
             border-left: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
@@ -44,14 +45,20 @@
         }
 
         .sidebar-header {
-            padding: 20px;
+            padding: 24px 20px;
             border-bottom: 1px solid var(--border-color);
         }
 
         .sidebar-header h2 {
-            font-size: 1.1rem;
-            color: var(--primary);
+            font-size: 1.2rem;
+            color: var(--accent);
             font-weight: 700;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
         .chapters-list {
@@ -60,17 +67,17 @@
             padding: 12px;
         }
 
-        /* Chapter Accordion */
         .chapter-item {
             margin-bottom: 8px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             overflow: hidden;
+            background: var(--bg-card);
         }
 
         .chapter-title {
             width: 100%;
-            background: #f1f5f9;
+            background: rgba(255, 255, 255, 0.03);
             padding: 12px 16px;
             display: flex;
             justify-content: space-between;
@@ -84,23 +91,26 @@
         }
 
         .chapter-title:hover {
-            background: #e2e8f0;
+            background: rgba(255, 255, 255, 0.07);
         }
 
         .arrow-icon {
             font-size: 0.75rem;
+            color: var(--text-muted);
             transition: transform 0.3s ease;
         }
 
         .chapter-item.open .arrow-icon {
-            transform: rotate(-90deg); /* چرخش مثلث در حالت باز */
+            transform: rotate(-90deg);
+            color: var(--accent);
         }
 
         .lessons-tree {
             display: none;
             list-style: none;
-            background: var(--bg-card);
+            background: var(--bg-side);
             padding: 6px 0;
+            border-top: 1px solid var(--border-color);
         }
 
         .chapter-item.open .lessons-tree {
@@ -123,18 +133,18 @@
         }
 
         .lesson-btn:hover {
-            color: var(--primary);
-            background: var(--accent-bg);
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.08);
         }
 
         .lesson-btn.active {
-            color: var(--primary);
-            background: var(--accent-bg);
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.12);
             font-weight: 600;
-            border-right: 3px solid var(--primary);
+            border-right: 3px solid var(--accent);
         }
 
-        /* --- Main Content Style --- */
+        /* Main Area */
         .main-content {
             flex: 1;
             height: 100vh;
@@ -142,25 +152,25 @@
             flex-direction: column;
             padding: 24px 32px;
             gap: 20px;
-            overflow: hidden; /* جلوگیری از اسکرول اصلی */
+            overflow: hidden;
         }
 
         .lesson-header h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--text-main);
+            font-weight: 700;
         }
 
-        /* Video Container */
         .video-wrapper {
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
             aspect-ratio: 16 / 9;
             background: #000;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            flex-shrink: 0; /* عدم تغییر سایز ویدیو */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            flex-shrink: 0;
         }
 
         .video-wrapper iframe {
@@ -169,64 +179,89 @@
             border: 0;
         }
 
-        /* Document Container (Internal Scroll) */
+        /* Internal Scroll Document Box */
         .doc-container {
             flex: 1;
-            background: var(--bg-card);
+            background: var(--bg-side);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* اسکرول فقط داخل این بخش */
-            max-width: 900px;
+            overflow: hidden;
+            max-width: 950px;
         }
 
         .doc-header {
             padding: 14px 20px;
-            background: #f8fafc;
+            background: rgba(0, 0, 0, 0.2);
             border-bottom: 1px solid var(--border-color);
             font-weight: 600;
             font-size: 0.95rem;
-            color: var(--text-main);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .doc-body {
-            padding: 20px;
-            overflow-y: auto; /* اسکرول داخلی داکیومنت */
+            padding: 24px;
+            overflow-y: auto;
             flex: 1;
             line-height: 1.8;
-            color: #334155;
+            color: #cbd5e1;
             font-size: 0.95rem;
+        }
+
+        .doc-body h2, .doc-body h3 {
+            color: var(--text-main);
+            margin: 16px 0 8px 0;
+        }
+
+        .doc-body ul, .doc-body ol {
+            margin-right: 20px;
+            margin-bottom: 12px;
+        }
+
+        .doc-body pre {
+            background-color: var(--code-bg);
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            direction: ltr;
+            text-align: left;
+            font-family: monospace;
+            color: var(--accent);
+            margin: 14px 0;
+            overflow-x: auto;
         }
 
         .doc-footer {
             padding: 12px 20px;
-            background: #f8fafc;
+            background: rgba(0, 0, 0, 0.2);
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
         }
 
-        /* Download Button */
         .btn-download {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background-color: var(--primary);
-            color: #ffffff;
-            padding: 8px 16px;
+            background-color: var(--accent);
+            color: #0f172a;
+            padding: 8px 18px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 0.88rem;
-            font-weight: 500;
-            transition: background 0.2s;
+            font-weight: 700;
+            transition: all 0.2s;
         }
 
         .btn-download:hover {
-            background-color: var(--primary-hover);
+            background-color: var(--accent-hover);
+            color: #fff;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -242,90 +277,65 @@
                 padding: 16px;
             }
             .doc-container {
-                height: 400px;
+                height: 450px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>سرفصل‌های آموزشی</h2>
+            <h2>مستندات و آموزش‌ها</h2>
+            <p>سرفصل‌ها و دروس دوره</p>
         </div>
-        <div class="chapters-list" id="chaptersContainer">
-            <!-- سرفصل‌ها و درس‌ها توسط JavaScript بارگذاری می‌شوند -->
-        </div>
+        <div class="chapters-list" id="chaptersContainer"></div>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="lesson-header">
             <h1 id="lessonTitle">در حال بارگذاری...</h1>
         </div>
 
-        <!-- Video Player -->
         <div class="video-wrapper">
             <iframe id="videoPlayer" src="" allowfullscreen></iframe>
         </div>
 
-        <!-- Document Section with Internal Scroll -->
         <div class="doc-container">
-            <div class="doc-header">📄 داکیومنت و متن درس</div>
-            <div class="doc-body" id="docContent">
-                <!-- متن داکیومنت اینجا قرار می‌گیرد -->
-            </div>
+            <div class="doc-header">📄 داکیومنت و راهنمای این جلسه</div>
+            <div class="doc-body" id="docContent"></div>
             <div class="doc-footer">
                 <a href="#" id="downloadBtn" class="btn-download" target="_blank" download>
-                    📥 دانلود فایل داکیومنت
+                    📥 دانلود فایل ضمیمه
                 </a>
             </div>
         </div>
     </main>
 
     <script>
-        // ساختار داده‌ها (دیتابیس فرضی - آماده برای اتصال به پنل ادمین یا JSON)
-        const lessonsData = [
-            {
-                chapterTitle: "فصل اول: مقدمات و پایه",
-                lessons: [
-                    {
-                        id: "1-1",
-                        title: "درس ۱: آشنایی با دوره",
-                        youtubeId: "dQw4w9WgXcQ",
-                        docHtml: "<p>به این دوره خوش آمدید. در این بخش با ساختار کلی و نقشه راه آشنا می‌شویم.</p><p>نکات کلیدی:</p><ul><li>مفهوم پایه</li><li>ابزارهای مورد نیاز</li></ul>",
-                        downloadUrl: "#"
-                    },
-                    {
-                        id: "1-2",
-                        title: "درس ۲: نصب ابزارها",
-                        youtubeId: "dQw4w9WgXcQ",
-                        docHtml: "<p>در این قسمت ابزارهای لازم را نصب می‌کنیم.</p><p>کد نصب:</p><pre>pip install package</pre>",
-                        downloadUrl: "#"
-                    }
-                ]
-            },
-            {
-                chapterTitle: "فصل دوم: مفاهیم پیشرفته",
-                lessons: [
-                    {
-                        id: "2-1",
-                        title: "درس ۱: اتصال به پایگاه داده",
-                        youtubeId: "dQw4w9WgXcQ",
-                        docHtml: "<p>توضیحات مفصل مربوط به پیکربندی دیتابیس و اتصال آن به برنامه...</p>",
-                        downloadUrl: "#"
-                    }
-                ]
-            }
-        ];
+        let globalLessonsData = [];
 
-        // رندر کردن منوی سرفصل‌ها
+        function loadData() {
+            fetch('lessons.json')
+                .then(res => res.json())
+                .then(data => {
+                    globalLessonsData = data;
+                    renderSidebar();
+                    if(data.length > 0 && data[0].lessons.length > 0) {
+                        selectLesson(data[0].lessons[0].id);
+                    }
+                })
+                .catch(err => {
+                    console.error("خطا در بارگذاری JSON:", err);
+                    document.getElementById('lessonTitle').textContent = "خطا در بارگذاری اطلاعات!";
+                });
+        }
+
         function renderSidebar() {
             const container = document.getElementById('chaptersContainer');
             container.innerHTML = '';
 
-            lessonsData.forEach((chapter, chapterIdx) => {
+            globalLessonsData.forEach((chapter, chapterIdx) => {
                 const chapterEl = document.createElement('div');
                 chapterEl.className = `chapter-item ${chapterIdx === 0 ? 'open' : ''}`;
 
@@ -338,8 +348,9 @@
                         ${chapter.lessons.map((lesson, lessonIdx) => `
                             <li>
                                 <button class="lesson-btn ${chapterIdx === 0 && lessonIdx === 0 ? 'active' : ''}" 
-                                        onclick="selectLesson('${lesson.id}', this)">
-                                    🔹 ${lesson.title}
+                                        id="btn-${lesson.id}"
+                                        onclick="selectLesson('${lesson.id}')">
+                                    ▶ ${lesson.title}
                                 </button>
                             </li>
                         `).join('')}
@@ -349,40 +360,30 @@
             });
         }
 
-        // باز و بسته کردن آکاردئونی فصل‌ها
         function toggleChapter(btn) {
-            const item = btn.parentElement;
-            item.classList.toggle('open');
+            btn.parentElement.classList.toggle('open');
         }
 
-        // انتخاب درس و نمایش اطلاعات
-        function selectLesson(lessonId, btnEl) {
-            // فعال کردن دکمه انتخابی
+        function selectLesson(lessonId) {
             document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
-            if(btnEl) btnEl.classList.add('active');
+            const activeBtn = document.getElementById(`btn-${lessonId}`);
+            if(activeBtn) activeBtn.classList.add('active');
 
-            // پیدا کردن داده‌های درس
-            let selectedLesson = null;
-            for (const chapter of lessonsData) {
-                const found = chapter.lessons.find(l => l.id === lessonId);
-                if (found) {
-                    selectedLesson = found;
-                    break;
-                }
+            let selected = null;
+            for (const ch of globalLessonsData) {
+                const found = ch.lessons.find(l => l.id === lessonId);
+                if (found) { selected = found; break; }
             }
 
-            if (selectedLesson) {
-                document.getElementById('lessonTitle').textContent = selectedLesson.title;
-                document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${selectedLesson.youtubeId}`;
-                document.getElementById('docContent').innerHTML = selectedLesson.docHtml;
-                document.getElementById('downloadBtn').href = selectedLesson.downloadUrl;
+            if (selected) {
+                document.getElementById('lessonTitle').textContent = selected.title;
+                document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${selected.youtubeId}`;
+                document.getElementById('docContent').innerHTML = selected.docHtml;
+                document.getElementById('downloadBtn').href = selected.downloadUrl || '#';
             }
         }
 
-        // اجرای اولیه
-        renderSidebar();
-        // لود اولین درس به صورت پیش‌فرض
-        selectLesson(lessonsData[0].lessons[0].id);
+        loadData();
     </script>
 </body>
 </html>

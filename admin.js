@@ -35,7 +35,7 @@ function showDashboard() {
     AdminManager.init();
 }
 
-// Check auth status when page loads
+// Check auth status & Setup Event Listeners when page loads
 document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.getItem('authenticated') === 'true') {
         showDashboard();
@@ -58,6 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
             AdminManager.saveLesson();
         });
     }
+
+    // بازخوانی اطلاعات ذخیره‌شده ریپازیتوری و توکن در فرم
+    const savedRepo = localStorage.getItem('gh_repo');
+    const savedToken = localStorage.getItem('gh_token');
+    if (savedRepo && document.getElementById('repoPath')) document.getElementById('repoPath').value = savedRepo;
+    if (savedToken && document.getElementById('ghToken')) document.getElementById('ghToken').value = savedToken;
 });
 
 // Data Manager Class
@@ -65,7 +71,8 @@ const AdminManager = {
     data: [],
 
     init() {
-        fetch('lessons.json')
+        // جلوگیری از کش شدن هنگام بارگذاری ابتدایی
+        fetch('lessons.json?v=' + new Date().getTime())
             .then(res => res.json())
             .then(data => {
                 this.data = data;
@@ -105,15 +112,15 @@ const AdminManager = {
             item.innerHTML = `
                 <div class="chapter-admin-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding:8px; background:rgba(255,255,255,0.05); border-radius:6px;">
                     <strong>${ch.chapterTitle}</strong>
-                    <button class="sm-btn btn-danger" type="button" onclick="AdminManager.deleteChapter(${chIdx})">حذف فصل</button>
+                    <button class="sm-btn btn-danger" type="button" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="AdminManager.deleteChapter(${chIdx})">حذف فصل</button>
                 </div>
                 <div style="padding-right: 15px;">
                     ${ch.lessons.map((les) => `
-                        <div class="lesson-admin-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <div class="lesson-admin-item" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; background:rgba(0,0,0,0.2); padding:6px; border-radius:4px;">
                             <span>🔹 ${les.title}</span>
                             <div class="action-btns" style="display:flex; gap:6px;">
                                 <button class="sm-btn" type="button" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="AdminManager.editLesson('${les.id}')">ویرایش</button>
-                                <button class="sm-btn btn-danger" type="button" onclick="AdminManager.deleteLesson('${les.id}')">حذف</button>
+                                <button class="sm-btn btn-danger" type="button" style="background:#dc2626; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="AdminManager.deleteLesson('${les.id}')">حذف</button>
                             </div>
                         </div>
                     `).join('')}
@@ -136,12 +143,14 @@ const AdminManager = {
         });
         titleInput.value = '';
         this.render();
+        this.showStatus("فصل جدید اضافه شد. برای اعمال نهایی روی دکمه «انتشار تغییرات» کلیک کنید.", "success");
     },
 
     deleteChapter(index) {
-        if (confirm("آیا از حذف این فصل و دروس آن اطمینان دارید؟")) {
+        if (confirm("آیا از حذف این فصل و تمامی دروس آن اطمینان دارید؟")) {
             this.data.splice(index, 1);
             this.render();
+            this.showStatus("فصل حذف شد.", "success");
         }
     },
 
@@ -157,7 +166,7 @@ const AdminManager = {
         if (!title) return alert("لطفاً عنوان درس را وارد کنید!");
 
         if (editId) {
-            // Edit existing lesson
+            // ویرایش درس موجود
             for (let ch of this.data) {
                 const found = ch.lessons.find(l => l.id === editId);
                 if (found) {
@@ -169,7 +178,7 @@ const AdminManager = {
                 }
             }
         } else {
-            // Create new lesson
+            // ساخت درس جدید
             const newId = `${parseInt(chIdx) + 1}-${Date.now()}`;
             this.data[chIdx].lessons.push({
                 id: newId,
@@ -182,7 +191,7 @@ const AdminManager = {
 
         this.resetForm();
         this.render();
-        this.showStatus("تغییرات با موفقیت در حافظه اعمال شد!", "success");
+        this.showStatus("درس با موفقیت ثبت شد. حتماً دکمه «انتشار تغییرات» را بزنید تا در گیت‌هاب ذخیره شود.", "success");
     },
 
     editLesson(id) {
@@ -209,6 +218,8 @@ const AdminManager = {
             const submitBtn = document.getElementById('submitBtn');
             if (formTitle) formTitle.textContent = "✏️ ویرایش درس";
             if (submitBtn) submitBtn.textContent = "بروزرسانی درس";
+
+            window.scrollTo({ top: document.getElementById('lessonForm').offsetTop - 20, behavior: 'smooth' });
         }
     },
 
@@ -218,6 +229,7 @@ const AdminManager = {
                 ch.lessons = ch.lessons.filter(l => l.id !== id);
             });
             this.render();
+            this.showStatus("درس حذف شد.", "success");
         }
     },
 
@@ -228,7 +240,7 @@ const AdminManager = {
         document.getElementById('editLessonId').value = '';
         const formTitle = document.getElementById('formTitle');
         const submitBtn = document.getElementById('submitBtn');
-        if (formTitle) formTitle.textContent = "➕ افزودن درس جدید";
+        if (formTitle) formTitle.textContent = "➕ افزودن / ویرایش درس";
         if (submitBtn) submitBtn.textContent = "ذخیره درس";
     },
 
@@ -252,42 +264,60 @@ const AdminManager = {
         const token = tokenInput.value.trim();
 
         if (!repo || !token) {
-            return alert("لطفاً نام ریپازیتوری و توکن GitHub را در کادر بالا وارد کنید.");
+            return this.showStatus("لطفاً نام ریپازیتوری و توکن GitHub را در کادر بالا وارد کنید.", "error");
         }
 
-        this.showStatus("در حال ارسال تغییرات به GitHub...", "success");
+        this.showStatus("⏳ در حال دریافت اطلاعات و برقراری ارتباط با GitHub...", "success");
 
         try {
-            // 1. Get current file SHA
-            const getUrl = `https://api.github.com/repos/${repo}/contents/lessons.json`;
+            const filePath = "lessons.json";
+            const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+
+            // ۱. دریافت فایل قبلی از گیت‌هاب جهت اخذ کد SHA
             let sha = "";
-            const getRes = await fetch(getUrl, {
-                headers: { "Authorization": `token ${token}` }
+            const getRes = await fetch(apiUrl, {
+                headers: {
+                    "Authorization": `token ${token}`,
+                    "Accept": "application/vnd.github.v3+json"
+                }
             });
+
             if (getRes.ok) {
                 const fileData = await getRes.json();
                 sha = fileData.sha;
             }
 
-            // 2. Commit updated JSON
-            const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(this.data, null, 4))));
-            const putRes = await fetch(getUrl, {
+            // ۲. تبدیل دقیق JSON به فرمت Base64 با پشتیبانی کامل از حروف فارسی
+            const jsonString = JSON.stringify(this.data, null, 2);
+            const utf8Bytes = new TextEncoder().encode(jsonString);
+            let binary = "";
+            utf8Bytes.forEach(b => binary += String.fromCharCode(b));
+            const contentEncoded = btoa(binary);
+
+            // ۳. ارسال Commit جدید به ریپازیتوری GitHub
+            const putRes = await fetch(apiUrl, {
                 method: "PUT",
                 headers: {
                     "Authorization": `token ${token}`,
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Accept": "application/vnd.github.v3+json"
                 },
                 body: JSON.stringify({
-                    message: "Update lessons.json database via Admin Panel",
+                    message: "Update lessons.json via Admin Panel",
                     content: contentEncoded,
                     sha: sha || undefined
                 })
             });
 
             if (putRes.ok) {
-                this.showStatus("✅ تغییرات با موفقیت روی GitHub Pages منتشر شد!", "success");
+                // ذخیره اطلاعات تنظیمات در حافظه مرورگر جهت سهولت استفاده مجدد
+                localStorage.setItem('gh_repo', repo);
+                localStorage.setItem('gh_token', token);
+
+                this.showStatus("✅ تغییرات با موفقیت روی GitHub منتشر شد! (حدود ۱ دقیقه دیگر در سایت اعمال می‌شود)", "success");
             } else {
-                throw new Error("خطا در ارسال داده‌ها به GitHub (توکن یا نام ریپازیتوری را بررسی کنید)");
+                const errData = await putRes.json();
+                throw new Error(errData.message || "خطا در ارسال اطلاعات به گیت‌هاب");
             }
         } catch (err) {
             console.error(err);
@@ -299,8 +329,13 @@ const AdminManager = {
         const el = document.getElementById('statusMessage');
         if (!el) return;
         el.textContent = msg;
-        el.className = `status-msg status-${type}`;
+        el.className = `status-msg status-${type === 'error' ? 'error' : 'success'}`;
         el.style.display = 'block';
-        setTimeout(() => { el.style.display = 'none'; }, 5000);
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setTimeout(() => { 
+            el.style.display = 'none'; 
+        }, 6000);
     }
 };

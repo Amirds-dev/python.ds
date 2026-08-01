@@ -1,33 +1,33 @@
 [
-    {
-        "chapterTitle": "فصل اول: مقدمات و پیش‌نیازها",
-        "lessons": [
-            {
-                "id": "1-1",
-                "title": "درس ۱: آشنایی با دوره و نقشه راه",
-                "youtubeId": "dQw4w9WgXcQ",
-                "docHtml": "<h3>مقدمه دوره</h3><p>در این جلسه به بررسی سرفصل‌ها و نحوه اجرای پروژه‌ها خواهیم پرداخت.</p><ul><li>بررسی پیش‌نیازها</li><li>معرفی ابزارها</li></ul>",
-                "downloadUrl": "https://github.com"
-            },
-            {
-                "id": "1-2",
-                "title": "درس ۲: راه اندازی محیط توسعه",
-                "youtubeId": "dQw4w9WgXcQ",
-                "docHtml": "<h3>نصب ابزارها</h3><p>دستورات زیر را جهت نصب بسته‌های مورد نیاز وارد کنید:</p><pre>pip install django\npython manage.py runserver</pre>",
-                "downloadUrl": "#"
-            }
-        ]
-    },
-    {
-        "chapterTitle": "فصل دوم: کدنویسی و توسعه پروژه",
-        "lessons": [
-            {
-                "id": "2-1",
-                "title": "درس ۱: اتصال به پایگاه داده",
-                "youtubeId": "dQw4w9WgXcQ",
-                "docHtml": "<h3>تنظیمات پایگاه داده</h3><p>در این قسمت نحوه اتصال برنامه به دیتابیس JSON و سرور را بررسی می‌کنیم.</p>",
-                "downloadUrl": "#"
-            }
-        ]
-    }
+  {
+    "chapterTitle": "فصل اول: مقدمات و پیش‌نیازها",
+    "lessons": [
+      {
+        "id": "lesson_101",
+        "title": "درس ۱: آشنایی با دوره و نقشه راه",
+        "youtubeId": "dQw4w9WgXcQ",
+        "docHtml": "<h3>مقدمه دوره</h3><p>در این قسمت به بررسی ساختار دوره و پیش‌نیازهای برنامه نویسی می‌پردازیم.</p>",
+        "downloadUrl": ""
+      },
+      {
+        "id": "lesson_102",
+        "title": "درس ۲: راه اندازی محیط توسعه",
+        "youtubeId": "dQw4w9WgXcQ",
+        "docHtml": "<h3>نصب ابزارها</h3><p>آموزش نصب VS Code و وابستگی‌های پروژه.</p>",
+        "downloadUrl": "https://example.com/file.zip"
+      }
+    ]
+  },
+  {
+    "chapterTitle": "فصل دوم: کدنویسی و توسعه پروژه",
+    "lessons": [
+      {
+        "id": "lesson_201",
+        "title": "درس ۱: اتصال به پایگاه داده",
+        "youtubeId": "dQw4w9WgXcQ",
+        "docHtml": "<h3>تنظیمات پایگاه داده</h3><p>در این قسمت نحوه اتصال برنامه به دیتا بیس بررسی می‌شود.</p>",
+        "downloadUrl": ""
+      }
+    ]
+  }
 ]

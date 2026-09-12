@@ -1,1 +1,12 @@
-{}
+DEVICE: device_AE68E7
+MODEL: Samsung SM-T295
+ANDROID: 11 (API 30)
+TIME: ۲۰۲۶-۰۹-۱۲ ۱۸:۲۶
+STATUS: Online
+NETWORK: Wi-Fi
+IP: 192.168.1.5
+DOWNLOAD: ۱۸۳٫۶ MB
+UPLOAD: ۱۱ MB
+
+APPS:
+NetMonitor = ۳۰۷٫۳ KB

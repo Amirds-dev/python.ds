@@ -1,3 +1,32 @@
+DEVICE: device_74F718
+MODEL: Samsung SM-A175F
+ANDROID: 16 (API 36)
+TIME: 2026-09-12 19:07
+STATUS: Online
+NETWORK: Wi-Fi
+IP: 192.168.1.4
+DOWNLOAD: 1.85 GB
+UPLOAD: 168.3 MB
+
+APPS:
+Myket = 1.03 GB
+System UID 10359 = 502.9 MB
+System UID 10303 = 93.1 MB
+System UID 10318 = 80.9 MB
+System UID 10244 = 74.4 MB
+System UID 10269 = 72.5 MB
+Google Play Store = 41.3 MB
+System UID 10345 = 29.7 MB
+Google Play services = 28.6 MB
+Google Services Framework = 28.6 MB
+System UID 10239 = 21.3 MB
+System UID 10302 = 20 MB
+System UID 10259 = 14.2 MB
+System UID 10300 = 10.7 MB
+System UID 10324 = 3.5 MB
+
+---
+
 DEVICE: device_95049D
 MODEL: Samsung SM-A175F
 ANDROID: 16 (API 36)

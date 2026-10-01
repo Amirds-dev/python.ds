@@ -1,29 +1,29 @@
 DEVICE: device_74F718
 MODEL: Samsung SM-A175F
 ANDROID: 16 (API 36)
-TIME: 2026-09-28 14:04
+TIME: 2026-10-01 08:14
 STATUS: Online
 NETWORK: Wi-Fi
-IP: 192.168.1.4
-DOWNLOAD: 1.7 MB
-UPLOAD: 365.7 KB
+IP: 192.168.1.2
+DOWNLOAD: 4.3 MB
+UPLOAD: 824.9 KB
 
 APPS:
-Google Play Store = 863.1 KB
-System UID 10359 = 672.9 KB
-System UID 10239 = 327 KB
-Google Play services = 106.5 KB
-Google Services Framework = 106.5 KB
-NetMonitor = 90.2 KB
-System UID 10307 = 23.9 KB
-Game Optimizing Service = 23.2 KB
-System UID 10242 = 10.1 KB
-System UID 10237 = 9.7 KB
-Android OS (Kernel) = 7.4 KB
-Tethering = 7.4 KB
-Cell Broadcast Service = 7.4 KB
-Network manager = 7.4 KB
-Filter Provider = 2.5 KB
+Google Play Store = 3.2 MB
+Google Play services = 880.3 KB
+Google Services Framework = 880.3 KB
+System UID 10305 = 618.5 KB
+System UID 10239 = 495.2 KB
+System UID 10269 = 183.4 KB
+Filter Provider = 149.8 KB
+com.samsung.android.smartswitchassistant = 149.8 KB
+com.samsung.android.knox.mpos = 149.8 KB
+DRParser Mode = 149.8 KB
+Dynamic System Updates = 149.8 KB
+Emergency SOS = 149.8 KB
+TetheringAutomation = 149.8 KB
+SKMSAgentService = 149.8 KB
+FactoryCamera = 149.8 KB
 
 ---
 

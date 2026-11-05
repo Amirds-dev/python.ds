@@ -1,12 +1,12 @@
 DEVICE: device_74F718
 MODEL: Samsung SM-A175F
 ANDROID: 17 (API 37)
-TIME: 2026-11-05 19:09
+TIME: 2026-11-05 19:11
 STATUS: Online
 NETWORK: Wi-Fi
 IP: 192.168.1.2
-DOWNLOAD: 246.3 MB
-UPLOAD: 29.5 MB
+DOWNLOAD: 246.6 MB
+UPLOAD: 29.7 MB
 
 APPS:
 System UID 10244 = 117.2 MB
@@ -15,15 +15,15 @@ System UID 10302 = 29.3 MB
 System UID 10305 = 21.9 MB
 System UID 10323 = 10 MB
 System UID 10359 = 7.5 MB
-Google Play Store = 4.9 MB
+Google Play Store = 5.2 MB
 System UID 10300 = 3.9 MB
 System UID 10239 = 3.8 MB
 Myket = 2.1 MB
-Google Play services = 2 MB
-Google Services Framework = 2 MB
-Filter Provider = 1,020.5 KB
-com.samsung.android.smartswitchassistant = 1,020.5 KB
-com.samsung.android.knox.mpos = 1,020.5 KB
+Google Play services = 2.1 MB
+Google Services Framework = 2.1 MB
+Filter Provider = 1,020.7 KB
+com.samsung.android.smartswitchassistant = 1,020.7 KB
+com.samsung.android.knox.mpos = 1,020.7 KB
 
 ---
 
